@@ -1,0 +1,31 @@
+#+TITLE: Binary expression evaluator in RAW C
+** Description
+An attempt to compile and run a binary expression for my mini pascal compiler project.
+** Resouces
+- [[https://web.stonehill.edu/compsci/CS104/Stuff/Infix%20and%20%20postfix%20expressions.pdf][Infix and postfix expressions]]
+- [[https://en.wikipedia.org/wiki/Binary_expression_tree][Binary expression tree]]
+** Instructions
+*** To run the program with an expression passed as a command line argument:
+#+BEGIN_SRC bash
+make run expr="1+2*3"
+make run expr="(1+2)*9+2"
+#+END_SRC
+
+* TODO Functionality [5/7]
+  - [X] Basic operation parsing[4/4]
+    - [X] +
+    - [X] -
+    - [X] /
+    - [X] *
+  - [X] Adding support for command line arguments
+  - [X] Adding support for parentheses
+  - [X] Building a binary expression tree from a postfix expression
+  - [X] Evaluating a binary expression tree
+  - [] Adding support for unary operators
+  - [] Adding support for boolean operators[0/4]
+    - [] And(&)
+    - [] Or(|)
+    - [] Not(!)
+    - [] Xor(^)
+       
+
