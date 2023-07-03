@@ -12,7 +12,7 @@ make run expr="(1+2)*9+2"
 #+END_SRC
 
 * TODO Functionality [5/7]
-  - [X] Basic operation parsing[4/4]
+  - [X] * DONE Basic operation parsing[4/4]
     - [X] +
     - [X] -
     - [X] /
