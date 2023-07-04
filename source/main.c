@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <postfix.h>
 #include <binary_expression_tree.h>
+#include <lexer.h>
 
 int evaluate(char *expression_string) {
   struct Expression *root=build_tree(expression_string);
@@ -17,7 +18,8 @@ int main(int argc, char **argv) {
     exit(420);
   }
   char *expression=argv[1];
-  printf("evaluating: %s\n", expression);
-  printf("result: %i\n", evaluate(expression));
+  tokenize(expression);
+  //printf("evaluating: %s\n", expression);
+  //printf("result: %i\n", evaluate(expression));
   return EXIT_SUCCESS;
 }

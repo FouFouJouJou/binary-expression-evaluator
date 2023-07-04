@@ -1,7 +1,11 @@
-eval: object/binary_expression_tree.o object/postfix.o object/main.o
+eval: object/binary_expression_tree.o object/postfix.o object/main.o object/lexer.o
 		@echo "linking and running"
 		[ ! -d build ] && mkdir build; gcc object/*.o -o build/main && build/main "$(expr)"
 		@echo "exit code: $$?"
+
+object/lexer.o: source/lexer.c
+		@echo "compiling lexer"
+		[ ! -d object ] && mkdir object; gcc -c source/lexer.c -o object/lexer.o -D_GNU_SOURCE -Iinclude
 
 object/binary_expression_tree.o: source/binary_expression_tree.c
 		@echo "compiling binary expression tree"
