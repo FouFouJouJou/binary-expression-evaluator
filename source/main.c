@@ -13,7 +13,7 @@ int evaluate(char *expression_string) {
 
 int main(int argc, char **argv) {
   if(argc != 2) {
-    fprintf(stderr, "No params provided\n");
+    fprintf(stderr, "No expression provided: expr argument is (nil)\n");
     exit(420);
   }
   char *expression=argv[1];
