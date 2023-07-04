@@ -3,30 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <assert.h>
-
-enum BinaryOperator {
-  NONE
-  ,ADD='+'
-  ,SUB='-'
-  ,DIV='/'
-  ,MULT='*'
-};
-
-
-struct IntLiteral {
-  int value;
-};
-
-struct BinaryExpression {
-  enum BinaryOperator operator;
-  struct Expression *left_expression;
-  struct Expression *right_expression;
-};
-
-struct Expression {
-  char *type;
-  void *expression;
-};
+#include <main.h>
 
 struct Expression *make_expression(char *type, void *expression, size_t bytes) {
   struct Expression *expr = malloc(sizeof(struct Expression));
