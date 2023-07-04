@@ -1,8 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
-#include <assert.h>
+#include <stdio.h>
 #include <postfix.h>
 #include <binary_expression_tree.h>
 
