@@ -67,17 +67,18 @@ int evaluate_expression_tree(struct Expression *expr) {
 }
 
 struct Expression *build_tree(char *expression_string) {
-  char *postfix_expression = infix_to_postfix(expression_string), *postfix_start=postfix_expression;
+  struct Token *postfix_expression = infix_to_postfix(expression_string), *postfix_start=postfix_expression;
   struct Expression *expression_stack[40];
   uint8_t stack_idx=0;
-  while(*postfix_start != '\0') {
-    if(*postfix_start >= '0' && *postfix_start <='9') {
-      expression_stack[stack_idx++]=make_int_literal(*postfix_start);
+  while(postfix_start->type != EOS) {
+  printf("%li\n", postfix_start-postfix_expression);
+    if(postfix_start->type == INT) {
+      expression_stack[stack_idx++]=make_int_literal(*(postfix_start->value));
     } else {
       assert(stack_idx > 1);
       struct Expression *n_1=expression_stack[stack_idx-1];
       struct Expression *n_2=expression_stack[stack_idx-2];
-      struct Expression *bin_op=make_binary_expression(*postfix_start, n_2, n_1);
+      struct Expression *bin_op=make_binary_expression(*(postfix_start->value), n_2, n_1);
       expression_stack[stack_idx-1]=expression_stack[stack_idx-2]=NULL;
       stack_idx-=2;
       stack_idx++;

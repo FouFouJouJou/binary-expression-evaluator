@@ -4,12 +4,14 @@
 #include <stdint.h>
 #include <assert.h>
 #include <postfix.h>
-uint8_t get_operator_priority(char opertor) {
+#include <lexer.h>
+uint8_t get_operator_priority(char operator) {
   char *priorities[] = {"()", "+-", "*/", "^"};
   int n=4;
   for(int i=0; i<n; ++i) {
-    if(strchr(priorities[i], opertor) != NULL) return i;
+    if(strchr(priorities[i], operator) != NULL) return i;
   }
+  fprintf(stderr, "postfix: illegal operator %c\n", operator);
   exit(69);
 }
 
@@ -38,68 +40,48 @@ char *reversed(char *string) {
   return string;
 }
 
-char *infix_to_postfix(char *infix_expression) {
-  char *result=calloc(strlen(infix_expression)+1, sizeof(char));
-  char operators[7]="*+/-()^";
-  char stack[50], *operator, *start=infix_expression, *result_pointer=result;
-  uint8_t stack_idx=0;
-  while(*start != '\0') {
-    if(*start >= '0' && *start <= '9') {
-      *result_pointer=*start;
-      result_pointer++;
+struct Token *infix_to_postfix(char *infix_expression) {
+  struct Token *tokens=tokenize(infix_expression), *token=tokens;
+  struct Token *result=calloc(30, sizeof(struct Token)), stack[50];
+  uint8_t stack_idx=0, result_idx=0;
+  while(token->type != EOS) {
+    if(token->type == INT) {
+      result[result_idx++]=*token;
+      token+=1;
     }
-    else if((operator=strchr(operators, *start)) != NULL) {
-      if(stack_idx == 0 || *operator == '(') {
-        stack[stack_idx++]=*operator;
-      }
-      else if(*operator == ')') {
-        for(uint8_t i=stack_idx-1; stack[i] != '(' && stack_idx!=0; --i) {
-          *result_pointer++=stack[i];
-          stack_idx--;
-        }
-        stack[stack_idx--]='\0';
-      }
-      else if(get_operator_priority(*operator) >= get_operator_priority(stack[stack_idx-1])) {
-        stack[stack_idx++]=*operator;
-      } 
-      else if(get_operator_priority(*operator) < get_operator_priority(stack[stack_idx-1])) {
-        while(get_operator_priority(*operator) < get_operator_priority(stack[stack_idx-1])
-            && stack_idx != 0) {
-          *result_pointer=stack[stack_idx-1];
-          stack[stack_idx-1]='\0';
-          stack_idx--;
-          result_pointer++;
-        }
-        stack[stack_idx++]=*operator;
-      }
+    else if(stack_idx == 0 || token->type == O_PAREN) {
+      stack[stack_idx++]=*token;
+      token+=1;
     }
-    start++;
+    else if(token->type == C_PAREN) {
+      for(uint8_t i=stack_idx-1; stack[i].type != O_PAREN && stack_idx!=0; --i) {
+        result[result_idx++]=stack[i];
+        stack_idx--;
+      }
+      stack[stack_idx--].type=EOS;
+      token+=1;
+    }
+    else if(get_operator_priority(*(token->value)) >= get_operator_priority(*(stack[stack_idx-1].value))) {
+      stack[stack_idx++]=*token;
+      token+=1;
+    } 
+    else if(get_operator_priority(*(token->value)) < get_operator_priority(*(stack[stack_idx-1].value))) {
+      while(get_operator_priority(*(token->value)) < get_operator_priority(*(stack[stack_idx-1].value))
+          && stack_idx != 0) {
+        result[result_idx++]=stack[stack_idx-1];
+        stack[stack_idx-1].type=EOS;
+        stack_idx-=1;
+      }
+      stack[stack_idx++]=*token;
+      token+=1;
+    }
   }
   if(stack_idx > 0) {
     for(uint8_t i=stack_idx; i>0; --i) {
-      *result_pointer++=stack[i-1];
+      result[result_idx++]=stack[i-1];
     }
   }
+  push(result, make_token(EOS, ""), &result_idx);
+  free(tokens);
   return result;
-}
-
-void run_test() {
-  char *expr1="1+2", *postfix1=infix_to_postfix(expr1);
-  char *expr2="1+2+3", *postfix2=infix_to_postfix(expr2);
-  char *expr3="1+2*3", *postfix3=infix_to_postfix(expr3);
-  char *expr4="1+(2*3)", *postfix4=infix_to_postfix(expr4);
-  char *expr5="(9*2)+(2*3)", *postfix5=infix_to_postfix(expr5);
-  char *expr6="(9*(2+1)) + (2*(3+1*3))", *postfix6=infix_to_postfix(expr6);
-  assert(!strcmp(postfix1,"12+"));
-  assert(!strcmp(postfix2,"123++"));
-  assert(!strcmp(postfix3,"123*+"));
-  assert(!strcmp(postfix4,"123*+"));
-  assert(!strcmp(postfix5,"92*23*+"));
-  assert(!strcmp(postfix6,"921+*2313*+*+"));
-  free(postfix1);
-  free(postfix2);
-  free(postfix3);
-  free(postfix4);
-  free(postfix5);
-  free(postfix6);
 }

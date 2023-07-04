@@ -52,7 +52,7 @@ void push(struct Token *stack, struct Token *token, uint8_t *stack_idx) {
 }
 
 struct Token *tokenize(char *source_code) {
-  struct Token token_stack[50];
+  struct Token *token_stack=calloc(30, sizeof(struct Token));
   uint8_t stack_idx=0;
   char operators[7]="+-/*()^";
   while(*source_code != '\0') {
@@ -82,12 +82,13 @@ struct Token *tokenize(char *source_code) {
         case ')': 
           push(token_stack, make_token(C_PAREN, strndupa(source_code, 1)), &stack_idx);
           break;
+        default:
+          fprintf(stderr, "lexer: operator not supported (%c)\n", *strndupa(source_code, 1));
+          exit(420);
       }
       source_code+=1;
     }
   }
-  for(uint8_t i=0; i<stack_idx; i++) {
-    printf_token(token_stack[i]);
-  }
+  push(token_stack, make_token(EOS, ""), &stack_idx);
   return token_stack;
 }

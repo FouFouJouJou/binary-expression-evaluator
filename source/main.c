@@ -18,8 +18,9 @@ int main(int argc, char **argv) {
     exit(420);
   }
   char *expression=argv[1];
-  tokenize(expression);
-  //printf("evaluating: %s\n", expression);
-  //printf("result: %i\n", evaluate(expression));
+  //tokenize(expression);
+  printf("evaluating: %s\n", expression);
+  struct Expression *root=build_tree(expression);
+  traverse_expression_tree(root, 0);
   return EXIT_SUCCESS;
 }
