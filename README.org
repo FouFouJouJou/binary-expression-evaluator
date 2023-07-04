@@ -21,6 +21,7 @@ make eval expr="(1+2)*9+2"
   - [X] Adding support for parentheses
   - [X] Building a binary expression tree from a postfix expression
   - [X] Evaluating a binary expression tree
+  - [] Implementing a small lexer for multi-digit number support
   - [] Adding support for unary operators
   - [] Adding support for boolean operators[0/4]
     - [] And(&)
