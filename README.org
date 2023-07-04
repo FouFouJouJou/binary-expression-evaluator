@@ -7,8 +7,8 @@ An attempt to compile and run a binary expression for my mini pascal compiler pr
 ** Instructions
 *** To run the program with an expression passed as a command line argument:
 #+BEGIN_SRC bash
-make expr="1+2*3"
-make expr="(1+2)*9+2"
+make eval expr="1+2*3"
+make eval expr="(1+2)*9+2"
 #+END_SRC
 
 * TODO Functionality [5/7]

@@ -1,4 +1,4 @@
-run: object/binary_expression_tree.o object/postfix.o object/main.o
+eval: object/binary_expression_tree.o object/postfix.o object/main.o
 		@echo "linking and running"
 		[ ! -d build ] && mkdir build; gcc object/*.o -o build/main && build/main "$(expr)"
 		@echo "exit code: $$?"
