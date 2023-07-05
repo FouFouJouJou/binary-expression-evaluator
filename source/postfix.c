@@ -81,7 +81,7 @@ struct Token *infix_to_postfix(char *infix_expression) {
       result[result_idx++]=stack[i-1];
     }
   }
-  push(result, make_token(EOS, ""), &result_idx);
+  result[result_idx++]=*token;
   free(tokens);
   return result;
 }

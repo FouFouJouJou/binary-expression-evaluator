@@ -13,9 +13,9 @@ struct Expression *make_expression(char *type, void *expression, size_t bytes) {
   return expr;
 }
 
-struct Expression *make_int_literal(char value) {
+struct Expression *make_int_literal(uint16_t value) {
   struct IntLiteral *int_literal=malloc(sizeof(struct IntLiteral));
-  int_literal->value=value-'0';
+  int_literal->value=value;
   struct Expression *expr=make_expression("int", int_literal, sizeof(*int_literal));
   return expr;
 }
@@ -45,14 +45,14 @@ void traverse_expression_tree(struct Expression *expr, uint8_t level) {
   if(level == 0) printf("\n");
 }
 
-int evaluate_expression_tree(struct Expression *expr) {
+uint16_t evaluate_expression_tree(struct Expression *expr) {
   if(!strcmp(expr->type, "int")) {
     return ((struct IntLiteral *)(expr->expression))->value;
   }
   else {
     struct BinaryExpression *bin_op = ((struct BinaryExpression *)(expr->expression));
-    int left_eval=evaluate_expression_tree(bin_op->left_expression);
-    int right_eval=evaluate_expression_tree(bin_op->right_expression);
+    uint16_t left_eval=evaluate_expression_tree(bin_op->left_expression);
+    uint16_t right_eval=evaluate_expression_tree(bin_op->right_expression);
     switch(bin_op->operator) {
       case '+':
         return left_eval + right_eval;
@@ -71,9 +71,8 @@ struct Expression *build_tree(char *expression_string) {
   struct Expression *expression_stack[40];
   uint8_t stack_idx=0;
   while(postfix_start->type != EOS) {
-  printf("%li\n", postfix_start-postfix_expression);
     if(postfix_start->type == INT) {
-      expression_stack[stack_idx++]=make_int_literal(*(postfix_start->value));
+      expression_stack[stack_idx++]=make_int_literal(atoi(postfix_start->value));
     } else {
       assert(stack_idx > 1);
       struct Expression *n_1=expression_stack[stack_idx-1];

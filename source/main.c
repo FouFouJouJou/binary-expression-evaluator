@@ -4,9 +4,9 @@
 #include <binary_expression_tree.h>
 #include <lexer.h>
 
-int evaluate(char *expression_string) {
+uint16_t evaluate(char *expression_string) {
   struct Expression *root=build_tree(expression_string);
-  int result=evaluate_expression_tree(root);
+  uint16_t result=evaluate_expression_tree(root);
   traverse_expression_tree(root,0);
   free_expression_tree(root);
   return result;
@@ -18,9 +18,7 @@ int main(int argc, char **argv) {
     exit(420);
   }
   char *expression=argv[1];
-  //tokenize(expression);
   printf("evaluating: %s\n", expression);
-  struct Expression *root=build_tree(expression);
-  traverse_expression_tree(root, 0);
+  printf("result: %d\n", evaluate(expression));
   return EXIT_SUCCESS;
 }
