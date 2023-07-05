@@ -13,7 +13,7 @@ struct Expression *make_expression(char *type, void *expression, size_t bytes) {
   return expr;
 }
 
-struct Expression *make_int_literal(uint16_t value) {
+struct Expression *make_int_literal(int16_t value) {
   struct IntLiteral *int_literal=malloc(sizeof(struct IntLiteral));
   int_literal->value=value;
   struct Expression *expr=make_expression("int", int_literal, sizeof(*int_literal));
@@ -45,14 +45,14 @@ void traverse_expression_tree(struct Expression *expr, uint8_t level) {
   if(level == 0) printf("\n");
 }
 
-uint16_t evaluate_expression_tree(struct Expression *expr) {
+int16_t evaluate_expression_tree(struct Expression *expr) {
   if(!strcmp(expr->type, "int")) {
     return ((struct IntLiteral *)(expr->expression))->value;
   }
   else {
     struct BinaryExpression *bin_op = ((struct BinaryExpression *)(expr->expression));
-    uint16_t left_eval=evaluate_expression_tree(bin_op->left_expression);
-    uint16_t right_eval=evaluate_expression_tree(bin_op->right_expression);
+    int16_t left_eval=evaluate_expression_tree(bin_op->left_expression);
+    int16_t right_eval=evaluate_expression_tree(bin_op->right_expression);
     switch(bin_op->operator) {
       case '+':
         return left_eval + right_eval;
