@@ -36,7 +36,7 @@ char *token_type_to_string(enum TokenType token_type) {
   case EOS:
     return "EOS";
   default:
-    fprintf(stderr, "token type illegal\n");
+    fprintf(stderr, "[lexer] Error: token type illegal (%d)\n", token_type);
   }
   return 0;
 }
@@ -55,10 +55,11 @@ struct Token *tokenize(char *source_code) {
   struct Token *token_stack=calloc(30, sizeof(struct Token));
   uint8_t stack_idx=0;
   char operators[7]="+-/*()^";
+  char digits[10]="0123456789";
   while(*source_code != '\0') {
     if(*source_code == ' ') source_code += 1;
     else if(*source_code >= '0' && *source_code <= '9') {
-      size_t n=strcspn(source_code, operators);
+      size_t n=strspn(source_code, digits);
       push(token_stack, make_token(INT, strndupa(source_code, n)), &stack_idx);
       source_code+=n;
     }
@@ -83,7 +84,7 @@ struct Token *tokenize(char *source_code) {
           push(token_stack, make_token(C_PAREN, strndupa(source_code, 1)), &stack_idx);
           break;
         default:
-          fprintf(stderr, "lexer: operator not supported (%c)\n", *strndupa(source_code, 1));
+          fprintf(stderr, "[lexer] Error: token not supported (%c)\n", *strndupa(source_code, 1));
           exit(420);
       }
       source_code+=1;
