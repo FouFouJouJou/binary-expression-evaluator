@@ -1,6 +1,10 @@
-eval: object/binary_expression_tree.o object/postfix.o object/main.o object/lexer.o
+eval: build/main
 		@echo "linking and running"
-		[ ! -d build ] && mkdir build; gcc object/*.o -o build/main && build/main "$(expr)"
+		@build/main "$(expr)"
+
+build/main: object/binary_expression_tree.o object/postfix.o object/main.o object/lexer.o
+		@echo "linking main"
+		[ ! -d build ] && mkdir build; gcc object/*.o -o build/main 
 		@echo "exit code: $$?"
 
 object/lexer.o: source/lexer.c
