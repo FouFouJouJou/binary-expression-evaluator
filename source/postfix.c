@@ -6,7 +6,7 @@
 #include <postfix.h>
 #include <lexer.h>
 uint8_t get_operator_priority(char operator) {
-  char *priorities[] = {"()", "+-", "*/", "^"};
+  char *priorities[] = {"()", "+-$", "*/", "^"};
   int n=4;
   for(int i=0; i<n; ++i) {
     if(strchr(priorities[i], operator) != NULL) return i;
@@ -40,6 +40,7 @@ char *reversed(char *string) {
   return string;
 }
 
+// 3*-(1*3)
 struct Token *infix_to_postfix(char *infix_expression) {
   struct Token *tokens=tokenize(infix_expression), *token=tokens;
   struct Token *result=calloc(30, sizeof(struct Token)), stack[50];
@@ -49,7 +50,7 @@ struct Token *infix_to_postfix(char *infix_expression) {
       result[result_idx++]=*token;
       token+=1;
     }
-    else if(stack_idx == 0 || token->type == O_PAREN) {
+    else if(stack_idx == 0 || token->type == O_PAREN || token->type == NEGATE) {
       stack[stack_idx++]=*token;
       token+=1;
     }
