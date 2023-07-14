@@ -61,7 +61,6 @@ struct Token *infix_to_postfix(char *infix_expression) {
         stack_idx-=1;
       }
       if(stack[stack_idx-1].type == O_PAREN) {
-        printf("open paren\n");
         stack[stack_idx--].type=EOS;
       }
       token+=1;
@@ -81,20 +80,16 @@ struct Token *infix_to_postfix(char *infix_expression) {
       stack[stack_idx++]=*token;
       token+=1;
     }
-    printf("%s %d\n", token->value, stack_idx);
   }
   if(stack_idx > 0) {
     for(uint8_t i=stack_idx; i>0; --i) {
-      printf_token(stack[i-1]);
       result[result_idx++]=stack[i-1];
     }
   }
 
-  printf("Done\n");
   // Token at this point has EOS type
   result[result_idx++]=*token;
   free(tokens);
-  for(int i=0; i<result_idx; ++i) printf_token(result[i]);
-  printf("%d\n", result_idx);
+  //for(int i=0; i<result_idx; ++i) printf_token(result[i]);
   return result;
 }

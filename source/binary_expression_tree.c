@@ -42,7 +42,7 @@ void traverse_expression_tree(struct Expression *expr, uint8_t level) {
   }
   else if(!strcmp(expr->type, "negate")) {
     struct Negate *negate = ((struct Negate *)(expr->expression));
-    printf("( NEGATE ");
+    printf("(- ");
     traverse_expression_tree(negate->expression, level+1);
     printf(")");
   }
