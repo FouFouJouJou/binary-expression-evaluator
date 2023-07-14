@@ -14,6 +14,7 @@ enum TokenType {
   ,O_PAREN
   ,C_PAREN
   ,EOS
+  ,NEGATE='$'
 };
 
 struct Token {

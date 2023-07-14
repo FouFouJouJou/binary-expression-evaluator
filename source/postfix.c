@@ -81,7 +81,11 @@ struct Token *infix_to_postfix(char *infix_expression) {
       result[result_idx++]=stack[i-1];
     }
   }
+
+  // Token at this point has EOS type
   result[result_idx++]=*token;
   free(tokens);
+  for(int i=0; i<result_idx; ++i) printf_token(result[i]);
+  printf("%d\n", result_idx);
   return result;
 }

@@ -19,6 +19,8 @@ void free_token(struct Token *token) {
 
 char *token_type_to_string(enum TokenType token_type) {
   switch(token_type) {
+  case NEGATE:
+    return "NEGATE";
   case INT:
     return "INT";
   case PLUS:
@@ -55,6 +57,7 @@ struct Token *tokenize(char *source_code) {
   struct Token *token_stack=calloc(30, sizeof(struct Token));
   uint8_t stack_idx=0;
   char operators[7]="+-/*()^";
+  char binary_operators[6]="+-/*^";
   char digits[10]="0123456789";
   while(*source_code != '\0') {
     if(*source_code == ' ') source_code += 1;
@@ -69,7 +72,10 @@ struct Token *tokenize(char *source_code) {
           push(token_stack, make_token(PLUS, strndupa(source_code, 1)), &stack_idx);
           break;
         case '-': 
-          push(token_stack, make_token(MINUS, strndupa(source_code, 1)), &stack_idx);
+          if(*(source_code-1) == '(' || strchr(binary_operators, *(source_code-1)) != 0)
+            push(token_stack, make_token(NEGATE, strndupa(source_code, 1)), &stack_idx);
+          else
+            push(token_stack, make_token(MINUS, strndupa(source_code, 1)), &stack_idx);
           break;
         case '/': 
           push(token_stack, make_token(SLASH, strndupa(source_code, 1)), &stack_idx);

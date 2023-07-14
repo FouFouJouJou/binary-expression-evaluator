@@ -2,8 +2,18 @@
 #define __BINARY_EXPR_TREE_h__
 #include <stdint.h>
 #include <postfix.h>
+// TODO: add expression type to make switch cases
+// and prevent future bugs
+enum ExpressionType {
+  INT_LITERAL_TYPE
+};
+
 struct IntLiteral {
   int16_t value;
+};
+
+struct Negate {
+  struct Expression *expression;
 };
 
 struct BinaryExpression {
@@ -17,9 +27,6 @@ struct Expression {
   void *expression;
 };
 
-struct Expression *make_expression(char *type, void *expression, size_t bytes);
-struct Expression *make_int_literal(int16_t value);
-struct Expression *make_binary_expression(enum BinaryOperator op, struct Expression *left, struct Expression *right);
 void traverse_expression_tree(struct Expression *expr, uint8_t level);
 int16_t evaluate_expression_tree(struct Expression *expr);
 struct Expression *build_tree(char *expression_string);

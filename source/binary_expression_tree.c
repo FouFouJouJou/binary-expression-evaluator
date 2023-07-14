@@ -16,24 +16,35 @@ struct Expression *make_expression(char *type, void *expression, size_t bytes) {
 struct Expression *make_int_literal(int16_t value) {
   struct IntLiteral *int_literal=malloc(sizeof(struct IntLiteral));
   int_literal->value=value;
-  struct Expression *expr=make_expression("int", int_literal, sizeof(*int_literal));
-  return expr;
+  return make_expression("int", int_literal, sizeof(*int_literal));
 }
 
 
 struct Expression *make_binary_expression(enum BinaryOperator op, struct Expression *left, struct Expression *right) {
-  struct BinaryExpression *bin_op= malloc(sizeof(struct BinaryExpression));
+  struct BinaryExpression *bin_op=malloc(sizeof(struct BinaryExpression));
   bin_op->operator=op;
   bin_op->left_expression=left;
   bin_op->right_expression=right;
-  struct Expression *expr = make_expression("bin_op", bin_op, sizeof(*bin_op));
-  return expr;
+  return make_expression("bin_op", bin_op, sizeof(*bin_op));
+}
+
+struct Expression *make_negate_expression(struct Expression *expression) {
+  struct Negate *negate=malloc(sizeof(struct Negate));
+  negate->expression=expression;
+  return make_expression("negate", negate, sizeof(*negate));
+
 }
 
 void traverse_expression_tree(struct Expression *expr, uint8_t level) {
   for(uint8_t i=0; i<level; ++i) printf(" ");
   if(!strcmp(expr->type, "int")) {
     printf("%i", ((struct IntLiteral *)(expr->expression))->value);
+  }
+  else if(!strcmp(expr->type, "negate")) {
+    struct Negate *negate = ((struct Negate *)(expr->expression));
+    printf("( - ");
+    traverse_expression_tree(negate->expression, level+1);
+    printf(")");
   }
   else {
     struct BinaryExpression *bin_op = ((struct BinaryExpression *)(expr->expression));
@@ -48,6 +59,10 @@ void traverse_expression_tree(struct Expression *expr, uint8_t level) {
 int16_t evaluate_expression_tree(struct Expression *expr) {
   if(!strcmp(expr->type, "int")) {
     return ((struct IntLiteral *)(expr->expression))->value;
+  }
+  else if(!strcmp(expr->type, "negate")) {
+    struct Negate *negate = ((struct Negate *)(expr->expression));
+    return -evaluate_expression_tree(negate->expression);
   }
   else {
     struct BinaryExpression *bin_op = ((struct BinaryExpression *)(expr->expression));
@@ -73,7 +88,14 @@ struct Expression *build_tree(char *expression_string) {
   while(postfix_start->type != EOS) {
     if(postfix_start->type == INT) {
       expression_stack[stack_idx++]=make_int_literal(atoi(postfix_start->value));
-    } else {
+    }
+    else if(postfix_start->type == NEGATE) {
+      assert(stack_idx >= 1);
+      struct Expression *n_1=expression_stack[stack_idx-1];
+      struct Expression *negate=make_negate_expression(n_1);
+      expression_stack[stack_idx-1]=negate;
+    }
+    else {
       assert(stack_idx > 1);
       struct Expression *n_1=expression_stack[stack_idx-1];
       struct Expression *n_2=expression_stack[stack_idx-2];
@@ -96,6 +118,10 @@ void free_expression_tree(struct Expression *root) {
     free(root->type);
     free(root->expression);
     free(root);
+  }
+  else if(!strcmp(root->type, "negate")) {
+    struct Negate *negate = root->expression;
+    free(negate->expression);
   }
   else {
     struct BinaryExpression *bin_op = root->expression;
