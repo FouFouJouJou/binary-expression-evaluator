@@ -59,41 +59,44 @@ struct Token *tokenize(char *source_code) {
   char operators[7]="+-/*()^";
   char binary_operators[6]="+-/*^";
   char digits[10]="0123456789";
-  while(*source_code != '\0') {
-    if(*source_code == ' ') source_code += 1;
-    else if(*source_code >= '0' && *source_code <= '9') {
-      size_t n=strspn(source_code, digits);
-      push(token_stack, make_token(INT, strndupa(source_code, n)), &stack_idx);
-      source_code+=n;
+  char *source_code_pointer=source_code;
+  while(*source_code_pointer != '\0') {
+    if(*source_code_pointer == ' ') source_code_pointer += 1;
+    else if(*source_code_pointer >= '0' && *source_code_pointer <= '9') {
+      size_t n=strspn(source_code_pointer, digits);
+      push(token_stack, make_token(INT, strndupa(source_code_pointer, n)), &stack_idx);
+      source_code_pointer+=n;
     }
     else {
-      switch(*source_code) {
+      switch(*source_code_pointer) {
         case '+': 
-          push(token_stack, make_token(PLUS, strndupa(source_code, 1)), &stack_idx);
+          push(token_stack, make_token(PLUS, strndupa(source_code_pointer, 1)), &stack_idx);
           break;
         case '-': 
-          if(*(source_code-1) == '(' || strchr(binary_operators, *(source_code-1)) != 0)
+          if(source_code == source_code_pointer
+              || *(source_code_pointer-1) == '(' 
+              || strchr(binary_operators, *(source_code_pointer-1)) != 0)
             push(token_stack, make_token(NEGATE, "$"), &stack_idx);
           else
-            push(token_stack, make_token(MINUS, strndupa(source_code, 1)), &stack_idx);
+            push(token_stack, make_token(MINUS, strndupa(source_code_pointer, 1)), &stack_idx);
           break;
         case '/': 
-          push(token_stack, make_token(SLASH, strndupa(source_code, 1)), &stack_idx);
+          push(token_stack, make_token(SLASH, strndupa(source_code_pointer, 1)), &stack_idx);
           break;
         case '*': 
-          push(token_stack, make_token(STAR, strndupa(source_code, 1)), &stack_idx);
+          push(token_stack, make_token(STAR, strndupa(source_code_pointer, 1)), &stack_idx);
           break;
         case '(': 
-          push(token_stack, make_token(O_PAREN, strndupa(source_code, 1)), &stack_idx);
+          push(token_stack, make_token(O_PAREN, strndupa(source_code_pointer, 1)), &stack_idx);
           break;
         case ')': 
-          push(token_stack, make_token(C_PAREN, strndupa(source_code, 1)), &stack_idx);
+          push(token_stack, make_token(C_PAREN, strndupa(source_code_pointer, 1)), &stack_idx);
           break;
         default:
-          fprintf(stderr, "[lexer] Error: token not supported (%c)\n", *strndupa(source_code, 1));
+          fprintf(stderr, "[lexer] Error: token not supported (%c)\n", *strndupa(source_code_pointer, 1));
           exit(420);
       }
-      source_code+=1;
+      source_code_pointer+=1;
     }
   }
   push(token_stack, make_token(EOS, ""), &stack_idx);

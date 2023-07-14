@@ -65,13 +65,8 @@ struct Token *infix_to_postfix(char *infix_expression) {
       }
       token+=1;
     }
-    // ( + *
-    //else if(get_operator_priority(*(token->value)) >= get_operator_priority(*(stack[stack_idx-1].value))) {
-    //  stack[stack_idx++]=*token;
-    //  token+=1;
-    //} 
     else {
-      while(get_operator_priority(*(token->value)) <= get_operator_priority(*(stack[stack_idx-1].value))
+      while(get_operator_priority(*(token->value)) < get_operator_priority(*(stack[stack_idx-1].value))
           && stack_idx != 0) {
         result[result_idx++]=stack[stack_idx-1];
         stack[stack_idx-1].type=EOS;
