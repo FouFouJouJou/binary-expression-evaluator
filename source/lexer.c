@@ -73,7 +73,7 @@ struct Token *tokenize(char *source_code) {
           break;
         case '-': 
           if(*(source_code-1) == '(' || strchr(binary_operators, *(source_code-1)) != 0)
-            push(token_stack, make_token(NEGATE, strndupa(source_code, 1)), &stack_idx);
+            push(token_stack, make_token(NEGATE, "$"), &stack_idx);
           else
             push(token_stack, make_token(MINUS, strndupa(source_code, 1)), &stack_idx);
           break;
