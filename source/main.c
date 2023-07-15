@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <postfix.h>
 #include <binary_expression_tree.h>
-#include <lexer.h>
 
 int16_t evaluate(char *expression_string) {
   struct Expression *root=build_tree(expression_string);
