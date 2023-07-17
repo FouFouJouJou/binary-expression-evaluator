@@ -35,8 +35,14 @@ char *token_type_to_string(enum TokenType token_type) {
     return "O_PAREN";
   case C_PAREN:
     return "C_PAREN";
-  case EOS:
-    return "EOS";
+  case AND:
+    return "AND";
+  case OR:
+    return "OR";
+  case NOT:
+    return "NOT";
+  case XOR:
+    return "XOR";
   default:
     fprintf(stderr, "[lexer] Error: token type illegal (%d)\n", token_type);
   }
@@ -69,6 +75,15 @@ struct Token *tokenize(char *source_code) {
     }
     else {
       switch(*source_code_pointer) {
+        case '|':
+          push(token_stack, make_token(OR, strndupa(source_code_pointer,1)), &stack_idx);
+          break;
+        case '&':
+          push(token_stack, make_token(AND, strndupa(source_code_pointer,1)), &stack_idx);
+          break;
+        case '!':
+          push(token_stack, make_token(NOT, strndupa(source_code_pointer,1)), &stack_idx);
+          break;
         case '+': 
           push(token_stack, make_token(PLUS, strndupa(source_code_pointer, 1)), &stack_idx);
           break;
