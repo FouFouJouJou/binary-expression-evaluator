@@ -13,6 +13,10 @@ enum TokenType {
   ,STAR
   ,O_PAREN
   ,C_PAREN
+  ,AND
+  ,OR
+  ,XOR
+  ,NOT
   ,EOS
   ,NEGATE='$'
 };
