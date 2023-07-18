@@ -22,8 +22,9 @@ make eval expr="(1+2)*9+2"
   - [X] Building a binary expression tree from a postfix expression
   - [X] Evaluating a binary expression tree
   - [X] Implementing a small lexer for multi-digit number support
-  - [X] Adding support for unary operators [1/1]
-    - [x] negate (-)
+  - [X] Adding support for unary operators [1/2]
+    - [x] negate (-expression)
+    - [] prefix plus (+expression)
   - [] Adding support for boolean operators[0/4]
     - [] And(&)
     - [] Or(|)
