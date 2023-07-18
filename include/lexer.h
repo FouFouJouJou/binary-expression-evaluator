@@ -19,6 +19,7 @@ enum TokenType {
   ,NOT
   ,EOS
   ,NEGATE='$'
+  ,PREF_PLUS='£'
 };
 
 struct Token {

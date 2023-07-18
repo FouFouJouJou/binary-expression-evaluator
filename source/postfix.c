@@ -6,7 +6,7 @@
 #include <postfix.h>
 #include <lexer.h>
 uint8_t get_operator_priority(char operator) {
-  char *priorities[] = {"(", "+-|&", "*/", "!$"};
+  char *priorities[] = {"(", "+-|&£", "*/", "!$"};
   int n=4;
   for(int i=0; i<n; ++i) {
     if(strchr(priorities[i], operator) != NULL) return i;
