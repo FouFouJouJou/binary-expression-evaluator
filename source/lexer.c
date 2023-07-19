@@ -64,8 +64,8 @@ void push(struct Token *stack, struct Token *token, uint8_t *stack_idx) {
 struct Token *tokenize(char *source_code) {
   struct Token *token_stack=calloc(30, sizeof(struct Token));
   uint8_t stack_idx=0;
-  char operators[7]="+-/*()^";
-  char binary_operators[6]="+-/*^";
+  char operators[7]="+-/*()^&|°!";
+  char binary_operators[6]="&|°+-/*^";
   char digits[10]="0123456789";
   char *source_code_pointer=source_code;
   while(*source_code_pointer != '\0') {
@@ -90,7 +90,7 @@ struct Token *tokenize(char *source_code) {
           if(source_code == source_code_pointer
               || *(source_code_pointer-1) == '(' 
               || strchr(binary_operators, *(source_code_pointer-1)) != 0)
-            push(token_stack, make_token(PREF_PLUS, "£"), &stack_idx);
+            push(token_stack, make_token(PREF_PLUS, "°"), &stack_idx);
           push(token_stack, make_token(PLUS, strndupa(source_code_pointer, 1)), &stack_idx);
           break;
         case '-': 
