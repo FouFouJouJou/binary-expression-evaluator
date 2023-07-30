@@ -64,8 +64,8 @@ void push(struct Token *stack, struct Token *token, uint8_t *stack_idx) {
 struct Token *tokenize(char *source_code) {
   struct Token *token_stack=calloc(30, sizeof(struct Token));
   uint8_t stack_idx=0;
-  char operators[7]="+-/*()^&|°!";
-  char binary_operators[6]="&|°+-/*^";
+  char operators[12]="+-/*()^&|°!";
+  char binary_operators[9]="&|°+-/*^";
   char digits[10]="0123456789";
   char *source_code_pointer=source_code;
   while(*source_code_pointer != '\0') {
