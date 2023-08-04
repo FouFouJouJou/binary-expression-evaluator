@@ -19,7 +19,7 @@ enum TokenType {
   ,NOT
   ,EOS
   ,NEGATE='$'
-  ,PREF_PLUS
+  ,PREF_PLUS='#'
 };
 
 struct Token {
