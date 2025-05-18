@@ -11,7 +11,7 @@ An attempt to compile and run a binary expression for my mini pascal compiler pr
   cd <build_directroy>
   cmake ..
   make
-  ./main <operation> <expression>
+  ./main help
 #+END_SRC
 
 * TODO Functionality [8/9]
