@@ -14,8 +14,8 @@ An attempt to compile and run a binary expression for my mini pascal compiler pr
   ./main <operation> <expression>
 #+END_SRC
 
-* TODO Functionality [7/9]
-  - [ ] Help
+* TODO Functionality [8/9]
+  - [X] Help
   - [X] Basic operation parsing[4/4]
     - [X] +
     - [X] -
