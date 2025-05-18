@@ -29,8 +29,10 @@ struct Token {
 
 struct Token *make_token(enum TokenType token_type, char *value);
 void free_token(struct Token *token);
+void free_tokens(struct Token *tokens);
 char *token_type_to_string(enum TokenType token_type);
 void printf_token(struct Token token);
+void printf_tokens(struct Token *tokens, void(*printf_token)(struct Token token));
 void push(struct Token stack[], struct Token *token, uint8_t *stack_idx);
 struct Token *tokenize(char *source_code);
 #endif

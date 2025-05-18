@@ -69,16 +69,17 @@ int16_t evaluate_expression_tree(struct Expression *expr) {
     int16_t left_eval=evaluate_expression_tree(bin_op->left_expression);
     int16_t right_eval=evaluate_expression_tree(bin_op->right_expression);
     switch(bin_op->operator) {
-      case '+':
-        return left_eval + right_eval;
-      case '-':
-        return left_eval - right_eval;
-      case '*':
-        return left_eval * right_eval;
-      case '/':
-        return left_eval / right_eval;
+    case '+':
+      return left_eval + right_eval;
+    case '-':
+      return left_eval - right_eval;
+    case '*':
+      return left_eval * right_eval;
+    case '/':
+      return left_eval / right_eval;
     }
   }
+  assert(0 && "unreachable");
 }
 
 struct Expression *build_tree(char *expression_string) {
@@ -108,7 +109,7 @@ struct Expression *build_tree(char *expression_string) {
     }
     postfix_start++;
   }
-  free(postfix_expression);
+  free_tokens(postfix_expression);
   assert(stack_idx == 1);
   return expression_stack[0];
 }

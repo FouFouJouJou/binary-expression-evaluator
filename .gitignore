@@ -2,3 +2,7 @@ build/
 object/
 **/*.swp
 scratch.txt
+/GPATH
+/GRTAGS
+/GTAGS
+/bin/

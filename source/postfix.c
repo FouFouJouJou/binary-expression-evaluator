@@ -56,21 +56,20 @@ struct Token *infix_to_postfix(char *infix_expression) {
     }
     else if(token->type == C_PAREN) {
       for(uint8_t i=stack_idx-1; stack[i].type != O_PAREN && stack_idx!=0; --i) {
-        result[result_idx++]=stack[i];
-        stack[i].type=EOS;
-        stack_idx-=1;
+	result[result_idx++]=stack[i];
+	stack[i].type=EOS;
+	stack_idx-=1;
       }
       if(stack[stack_idx-1].type == O_PAREN) {
-        stack[stack_idx--].type=EOS;
+	stack[stack_idx--].type=EOS;
       }
       token+=1;
     }
     else {
-      while(get_operator_priority(*(token->value)) < get_operator_priority(*(stack[stack_idx-1].value))
-          && stack_idx != 0) {
-        result[result_idx++]=stack[stack_idx-1];
-        stack[stack_idx-1].type=EOS;
-        stack_idx-=1;
+      while(stack_idx != 0 && get_operator_priority(*(token->value)) < get_operator_priority(*(stack[stack_idx-1].value))) {
+	result[result_idx++]=stack[stack_idx-1];
+	stack[stack_idx-1].type=EOS;
+	stack_idx-=1;
       }
       stack[stack_idx++]=*token;
       token+=1;
@@ -85,6 +84,6 @@ struct Token *infix_to_postfix(char *infix_expression) {
   // Token at this point has EOS type
   result[result_idx++]=*token;
   free(tokens);
-  //for(int i=0; i<result_idx; ++i) printf_token(result[i]);
+  /* for(int i=0; i<result_idx; ++i) printf_token(result[i]); */
   return result;
 }
