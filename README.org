@@ -7,14 +7,15 @@ An attempt to compile and run a binary expression for my mini pascal compiler pr
 ** Instructions
 *** To run the program with an expression passed as a command line argument:
 #+BEGIN_SRC bash
-  mkdir bin
-  cd bin
+  mkdir <build_directory>
+  cd <build_directroy>
   cmake ..
   make
-  ./main "1+2*3"
+  ./main <operation> <expression>
 #+END_SRC
 
-* TODO Functionality [7/8]
+* TODO Functionality [7/9]
+  - [ ] Help
   - [X] Basic operation parsing[4/4]
     - [X] +
     - [X] -

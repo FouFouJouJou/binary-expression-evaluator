@@ -14,4 +14,5 @@ target_sources(${EXECUTABLE} PUBLIC
   ${SOURCE_DIRECTORY}/lexer.c
   ${SOURCE_DIRECTORY}/main.c
   ${SOURCE_DIRECTORY}/postfix.c
+  ${SOURCE_DIRECTORY}/cli.c
 )

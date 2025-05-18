@@ -1,54 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <lexer.h>
-#include <binary_expression_tree.h>
-#define TOTAL_OPERATIONS 4
-
-typedef void(*action)(char *);
-
-void eval(char *expression) {
-  printf("evaluating: %s\n", expression);
-  struct Expression *root=build_tree(expression);
-  int16_t result=evaluate_expression_tree(root);
-  free_expression_tree(root);
-  printf("result: %d\n", result);
-}
-
-void lex(char *expression) {
-  printf("tokenizing: %s\n", expression);
-  struct Token *tokens=tokenize(expression);
-  printf_tokens(tokens, printf_token);
-  free_tokens(tokens);
-}
-
-void postfix(char *expression) {
-  struct Expression *root=build_tree(expression);
-  printf("postfix: %s", expression);
-  traverse_expression_tree(root,0);
-  free_expression_tree(root);
-}
-
-void run(char *expression) {
-  printf("tokenizing: %s\n", expression);
-  struct Token *tokens=tokenize(expression);
-  printf_tokens(tokens, printf_token);
-  free_tokens(tokens);
-
-  struct Expression *root=build_tree(expression);
-  printf("postfix: %s", expression);
-  traverse_expression_tree(root, 0);
-  int16_t result=evaluate_expression_tree(root);
-  free_expression_tree(root);
-  printf("result: %d\n", result);
-}
-
-
-const char *operations[] = {"eval", "tokenize", "postfix", "run"};
-action actions[] = {eval, lex, postfix, run};
+#include <cli.h>
 
 int main(int argc, char **argv) {
-  if(argc != 3) {
+  if ((argc >1 && !strncmp(argv[1], "help", 4)) || argc == 1) {
+    help();
+    exit(1);
+  }
+
+  if (argc != 3) {
     fprintf(stderr, "No expression provided: expr argument is (nil)\n");
     exit(69);
   }
